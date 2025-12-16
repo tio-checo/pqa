@@ -101,7 +101,7 @@ static esp_err_t get_values_handler(httpd_req_t *req)
 {
     httpd_resp_set_type(req, "application/json");
     cJSON *root = cJSON_CreateObject();
-    cJSON_AddNumberToObject(root, "F", daq.freq[DAQ_CHANNEL_U1]);
+    cJSON_AddNumberToObject(root, "F", daq.freq[DAQ_CHANNEL_U3]);
     cJSON_AddNumberToObject(root, "U1", daq.L[DAQ_L1].U);
     cJSON_AddNumberToObject(root, "U2", daq.L[DAQ_L2].U);
     cJSON_AddNumberToObject(root, "U3", daq.L[DAQ_L3].U);

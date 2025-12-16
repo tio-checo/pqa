@@ -428,7 +428,7 @@ https_with_url(void)
 	    "&field7=%0.3f",
 	    THINGSPEAK_URL, daq.L[DAQ_L1].U, daq.L[DAQ_L2].U, daq.L[DAQ_L3].U,
 	    daq.L[DAQ_L1].I, daq.L[DAQ_L2].I, daq.L[DAQ_L3].I,
-	    daq.freq[DAQ_CHANNEL_U1]);
+	    daq.freq[DAQ_CHANNEL_U3]);
 
 	esp_http_client_handle_t client = esp_http_client_init(&config);
 

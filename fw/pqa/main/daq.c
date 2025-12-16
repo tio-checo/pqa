@@ -261,8 +261,8 @@ daq_calc_phase_shift(int ch1, int ch2)
 	float zclf = -1.0 * s2[ch2_zc - 1] / (s2[ch2_zc] - s2[ch2_zc - 1]);
 
 	/* Now calculate phase shift */
-	float ph = 360.0 * daq.freq[3] * (ch2_zc - 1 - ch1_zc + zcff + zclf)
-	    / DAQ_FS;
+	float ph = 360.0 * daq.freq[DAQ_CHANNEL_U3]
+	    * (ch2_zc - 1 - ch1_zc + zcff + zclf) / DAQ_FS;
 
 	while (ph >= 180.0) {
 		ph -= 360.0;
@@ -587,14 +587,17 @@ daq_task(void *args)
 		 * Calculate zero-crossing points
 		 * and frequency for channel 0
 		 */
-		daq.freq[0] = daq_calc_freq(0);
-		daq.freq[3] = daq_calc_freq(3);
+		daq.freq[DAQ_CHANNEL_I1] = daq_calc_freq(DAQ_CHANNEL_I1);
+		daq.freq[DAQ_CHANNEL_U1] = daq_calc_freq(DAQ_CHANNEL_U1);
+		daq.freq[DAQ_CHANNEL_U3] = daq_calc_freq(DAQ_CHANNEL_U3);
 		ct = esp_timer_get_time() - ct;
 
 		printf("Zero-crossing: zcf = %d, zcl = %d, zcn = %d\n",
 		    daq.zcd[0].first, daq.zcd[0].last, daq.zcd[0].num);
-//		printf("Ch3 freq: %.3f Hz, %lld us\n", daq.freq[3], ct);
-		printf("Ch0 freq: %.3f Hz, %lld us\n", daq.freq[0], ct);
+//		printf("U1 freq: %.3f Hz, %lld us\n", daq.freq[3], ct);
+//		printf("I1 freq: %.3f Hz, %lld us\n", daq.freq[0], ct);
+		printf("U3 freq: %.3f Hz, %lld us\n", daq.freq[DAQ_CHANNEL_U3],
+		    ct);
 
 		ct = esp_timer_get_time();
 		/* Calculate RMS for all channels */
