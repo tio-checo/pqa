@@ -2,11 +2,13 @@
  * Data acquisition module
  */
 
+#include <errno.h>
 #include <stdio.h>
 #include <inttypes.h>
 #include <math.h>
 #include <string.h>
 #include <strings.h>
+#include <sys/time.h>
 #include <time.h>
 
 #include "esp_timer.h"
@@ -493,7 +495,7 @@ daq_task(void *args)
 
 	/* FFT */
 	int ret = daq_fft_init(NULL, DAQ_FFT_N);
-	if (ret  != ESP_OK) {
+	if (ret != ESP_OK) {
 		ESP_LOGE(TAG, "Failed to initialize FFT. Error %i", ret);
 	}
 
@@ -618,6 +620,12 @@ daq_task(void *args)
 		/* Calculate amplitude for all channels */
 		daq_calc_amp();
 		ct = esp_timer_get_time() - ct;
+
+		/* Mark calculated values with timestamp */
+		if (gettimeofday(&daq.ts, NULL) != 0) {
+			ESP_LOGE(TAG, "gettimeofday() failed with errno %d",
+			    errno);
+		}
 
 		printf("---------------------------------------------------");
 		printf("-----------\n");

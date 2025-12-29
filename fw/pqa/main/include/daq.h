@@ -2,6 +2,8 @@
  * Data acquisition module
  */
 
+#include <time.h>
+
 /* number of ADC channels */
 #define DAQ_ADC_CHANNELS	6
 /* number of collected samples per one measurement */
@@ -46,6 +48,9 @@ typedef enum {
 
 /* DAQ calculated values */
 typedef struct {
+	/* timestamp */
+	struct timeval ts;
+
 	/* zero-crossing points */
 	struct {
 		int	first;	/* first point */

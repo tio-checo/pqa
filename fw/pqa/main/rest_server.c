@@ -8,6 +8,7 @@
 */
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 #include <fcntl.h>
 #include "esp_http_server.h"
 #include "esp_chip_info.h"
@@ -99,23 +100,41 @@ static esp_err_t get_samples_handler(httpd_req_t *req)
 /* Return calculated values */
 static esp_err_t get_values_handler(httpd_req_t *req)
 {
-    httpd_resp_set_type(req, "application/json");
-    cJSON *root = cJSON_CreateObject();
-    cJSON_AddNumberToObject(root, "F", daq.freq[DAQ_CHANNEL_U3]);
-    cJSON_AddNumberToObject(root, "U1", daq.L[DAQ_L1].U);
-    cJSON_AddNumberToObject(root, "U2", daq.L[DAQ_L2].U);
-    cJSON_AddNumberToObject(root, "U3", daq.L[DAQ_L3].U);
-    cJSON_AddNumberToObject(root, "I1", daq.L[DAQ_L1].I);
-    cJSON_AddNumberToObject(root, "I2", daq.L[DAQ_L2].I);
-    cJSON_AddNumberToObject(root, "I3", daq.L[DAQ_L3].I);
-    cJSON_AddNumberToObject(root, "FI1", daq.phase_shift[DAQ_PHASE_SHIFT_U1I1]);
-    cJSON_AddNumberToObject(root, "FI2", daq.phase_shift[DAQ_PHASE_SHIFT_U2I2]);
-    cJSON_AddNumberToObject(root, "FI3", daq.phase_shift[DAQ_PHASE_SHIFT_U3I3]);
-    const char *values = cJSON_Print(root);
-    httpd_resp_sendstr(req, values);
-    free((void *)values);
-    cJSON_Delete(root);
-    return ESP_OK;
+	struct tm utc_time;
+	char ts_buf[80];
+
+	httpd_resp_set_type(req, "application/json");
+
+	/* Create JSON object */
+	cJSON *root = cJSON_CreateObject();
+
+	/* Add timestamp */
+	gmtime_r(&daq.ts.tv_sec, &utc_time);
+	strftime(ts_buf, sizeof (ts_buf), "%Y-%m-%dT%H:%M:%SZ", &utc_time);
+	cJSON_AddStringToObject(root, "ts", ts_buf);
+
+	/* Add calculated values */
+	cJSON_AddNumberToObject(root, "f", daq.freq[DAQ_CHANNEL_U3]);
+	cJSON_AddNumberToObject(root, "u1", daq.L[DAQ_L1].U);
+	cJSON_AddNumberToObject(root, "u2", daq.L[DAQ_L2].U);
+	cJSON_AddNumberToObject(root, "u3", daq.L[DAQ_L3].U);
+	cJSON_AddNumberToObject(root, "i1", daq.L[DAQ_L1].I);
+	cJSON_AddNumberToObject(root, "i2", daq.L[DAQ_L2].I);
+	cJSON_AddNumberToObject(root, "i3", daq.L[DAQ_L3].I);
+	cJSON_AddNumberToObject(root, "fi1",
+	    daq.phase_shift[DAQ_PHASE_SHIFT_U1I1]);
+	cJSON_AddNumberToObject(root, "fi2",
+	    daq.phase_shift[DAQ_PHASE_SHIFT_U2I2]);
+	cJSON_AddNumberToObject(root, "fi3",
+	    daq.phase_shift[DAQ_PHASE_SHIFT_U3I3]);
+
+	const char *values = cJSON_Print(root);
+	httpd_resp_sendstr(req, values);
+
+	free((void *)values);
+	cJSON_Delete(root);
+
+	return ESP_OK;
 }
 
 #if 0
