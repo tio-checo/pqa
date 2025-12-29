@@ -127,6 +127,8 @@ static esp_err_t get_values_handler(httpd_req_t *req)
 	    daq.phase_shift[DAQ_PHASE_SHIFT_U2I2]);
 	cJSON_AddNumberToObject(root, "fi3",
 	    daq.phase_shift[DAQ_PHASE_SHIFT_U3I3]);
+	cJSON_AddNumberToObject(root, "p",
+	    daq.L[DAQ_L1].P + daq.L[DAQ_L2].P + daq.L[DAQ_L3].P);
 
 	const char *values = cJSON_Print(root);
 	httpd_resp_sendstr(req, values);

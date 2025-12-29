@@ -425,10 +425,11 @@ https_with_url(void)
 	snprintf(http_get_request, sizeof (http_get_request),
 	    "%s&field1=%0.2f&field2=%0.2f&field3=%0.2f"
 	    "&field4=%0.2f&field5=%0.2f&field6=%0.2f"
-	    "&field7=%0.3f",
+	    "&field7=%0.3f&field8=%0.1f",
 	    THINGSPEAK_URL, daq.L[DAQ_L1].U, daq.L[DAQ_L2].U, daq.L[DAQ_L3].U,
 	    daq.L[DAQ_L1].I, daq.L[DAQ_L2].I, daq.L[DAQ_L3].I,
-	    daq.freq[DAQ_CHANNEL_U3]);
+	    daq.freq[DAQ_CHANNEL_U3],
+	    daq.L[DAQ_L1].P + daq.L[DAQ_L2].P + daq.L[DAQ_L3].P);
 
 	esp_http_client_handle_t client = esp_http_client_init(&config);
 
