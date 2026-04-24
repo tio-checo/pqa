@@ -40,7 +40,7 @@
 /* HTTPS */
 #define WEB_SERVER "api.thingspeak.com"
 //#define WEB_PORT "443"
-#define	THINGSPEAK_API_KEY	"G51YVQKV9BMRHF6D"
+#define	THINGSPEAK_API_KEY	"TBD"
 //#define WEB_URL "https://api.thingspeak.com/update?api_key=G51YVQKV9BMRHF6D&field1=170"
 #define THINGSPEAK_URL "https://api.thingspeak.com/update?api_key=" THINGSPEAK_API_KEY
 
@@ -94,8 +94,8 @@ hb(void *args)
 #define WIFI_CONNECTED_BIT BIT0
 #define WIFI_FAIL_BIT      BIT1
 
-#define EXAMPLE_ESP_WIFI_SSID "UPC5254179"
-#define EXAMPLE_ESP_WIFI_PASS "uynWdsjWvf7p"
+#define EXAMPLE_ESP_WIFI_SSID "UPC*******"
+#define EXAMPLE_ESP_WIFI_PASS "**********"
 
 /* FreeRTOS event group to signal when we are connected*/
 static EventGroupHandle_t s_wifi_event_group;
