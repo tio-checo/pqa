@@ -1,0 +1,11 @@
+r1=300000;
+%r1=470;
+r2=470;
+c=1e-7;
+nom=r2;
+den=[r1*r2*c r1+r2];
+H=tf(nom,den);
+%step(H);
+bp=bodeplot(H);
+bp.FrequencyUnit="Hz";
+grid on;
